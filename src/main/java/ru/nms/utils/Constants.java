@@ -12,9 +12,8 @@ public class Constants {
     public static final int RADIUS_POSITION = META_DATA_HEADER_SIZE + BALL_TREE_HEADER_SIZE;
     public static final int RADIUS_SIZE = Double.BYTES;
     public static final int CENTROID_POSITION = RADIUS_POSITION + Double.BYTES;
-    public static final int SAMPLE_SIZE = Integer.MAX_VALUE;
-    public static final int NODE_MAX_SIZE = 100;
-    public static final String ROOT_DIR = "temp\\";
+    public static final int SAMPLE_SIZE = 10000;
+    public static final String TEMP_DIR = "temp\\";
     public static final Comparator<RealVector> PROJECTION_COMPARATOR = Comparator.comparingDouble(v -> Arrays.stream(v.toArray()).sum());
 
 }

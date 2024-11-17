@@ -13,17 +13,17 @@ import java.util.List;
 
 import static ru.nms.utils.BallTreeUtils.*;
 import static ru.nms.utils.Constants.BALL_TREE_HEADER_SIZE;
-import static ru.nms.utils.Constants.ROOT_DIR;
+import static ru.nms.utils.Constants.TEMP_DIR;
 
 @Slf4j
 public class KnnService {
-    public static List<RealVector> knn(RealVector target, int k, String rootFileName) throws IOException {
+    public static List<RealVector> knn(RealVector target, int k, String rootFilePath) throws IOException {
         Comparator<RealVector> comparator = Comparator.comparingDouble(v -> v.getDistance(target));
         MinMaxPriorityQueue<RealVector> knnQueue = null;
         int vectorSize;
-        try (RandomAccessFile file = new RandomAccessFile(ROOT_DIR + rootFileName, "r");
+        try (RandomAccessFile file = new RandomAccessFile(rootFilePath, "r");
              FileChannel fileChannel = file.getChannel()) {
-            verifyFileFormat(fileChannel, rootFileName);
+            verifyFileFormat(fileChannel, rootFilePath);
 
             fileChannel.position(BALL_TREE_HEADER_SIZE);
             long totalVectors = file.readLong();
@@ -38,7 +38,7 @@ public class KnnService {
             }
 
             if (totalVectors <= k) {
-                log.warn("total vectors: {}, k: {} - exiting", totalVectors, k);
+                //log.warn("total vectors: {}, k: {} - exiting", totalVectors, k);
                 return firstVectors;
             }
 
@@ -50,14 +50,14 @@ public class KnnService {
             vectorSize = getVectorSize(dimension);
 
         }
-        search(knnQueue, target, rootFileName, vectorSize);
+        search(knnQueue, target, rootFilePath);
         return knnQueue.stream().sorted(comparator).toList();
     }
 
-    private static void search(MinMaxPriorityQueue<RealVector> queue, RealVector target, String fileName, int vectorSize) throws IOException {
+    private static void search(MinMaxPriorityQueue<RealVector> queue, RealVector target, String filePath) throws IOException {
         long leftChildName;
         long rightChildName;
-        try (RandomAccessFile file = new RandomAccessFile(ROOT_DIR + fileName, "r");
+        try (RandomAccessFile file = new RandomAccessFile(filePath, "r");
              FileChannel fileChannel = file.getChannel()) {
 
             fileChannel.position(BALL_TREE_HEADER_SIZE);
@@ -69,8 +69,8 @@ public class KnnService {
             leftChildName = file.readLong();
             rightChildName = file.readLong();
 
-            log.info("searching in the node {} with totalVectors: {}, dimension: {}, radius: {}, left child: {}, right child: {}",
-                    fileName, totalVectors, dimension, radius, leftChildName, rightChildName);
+            //log.info("searching in the node {} with totalVectors: {}, dimension: {}, radius: {}, left child: {}, right child: {}",
+//                    filePath, totalVectors, dimension, radius, leftChildName, rightChildName);
             if (centroid.getDistance(target) - radius >= target.getDistance(queue.peekLast())) {
                 return;
             } else if (leftChildName == -1) {
@@ -83,7 +83,7 @@ public class KnnService {
                 return;
             }
         }
-        search(queue, target, String.valueOf(leftChildName), vectorSize);
-        search(queue, target, String.valueOf(rightChildName), vectorSize);
+        search(queue, target, TEMP_DIR + leftChildName);
+        search(queue, target, TEMP_DIR + rightChildName);
     }
 }

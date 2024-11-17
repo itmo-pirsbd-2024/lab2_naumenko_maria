@@ -140,13 +140,13 @@ public class BallTreeUtils {
         file.writeDouble(radius);
         putVectorToFile(file, centroid);
 
-        log.info("filling metadata for {} with totalVectors: {}, dimension: {}, radius: {}",
-                file.getFD(), writtenVectorsAmount, dimension, radius);
+        //log.info("filling metadata for {} with totalVectors: {}, dimension: {}, radius: {}",
+//                file.getFD(), writtenVectorsAmount, dimension, radius);
     }
 
     private static List<RealVector> extractSample(FileChannel fileChannel, int dimension, long totalVectors, int sampleSize) throws IOException {
         setPositionToStartOfVectorData(fileChannel, dimension);
-        int vectorsToRead = (int) Math.min(sampleSize / getVectorSize(dimension), totalVectors);
+        int vectorsToRead = (int) Math.min(sampleSize, totalVectors);
         List<RealVector> sampleVectors = new ArrayList<>(vectorsToRead);
 
         for (int i = 0; i < vectorsToRead; i++) {

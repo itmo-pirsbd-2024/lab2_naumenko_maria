@@ -13,7 +13,7 @@ import static ru.nms.utils.Constants.*;
 @Slf4j
 public class BallTreeBuilder {
 
-    public static void build(String fileName, boolean rootNode) throws IOException {
+    public static void build(String fileName, boolean rootNode, int leafSize) throws IOException {
 
         long leftChildFileName = System.nanoTime();
         long rightChildFileName = System.nanoTime();
@@ -21,13 +21,16 @@ public class BallTreeBuilder {
             rightChildFileName = System.nanoTime();
         }
 
-        try (RandomAccessFile file = new RandomAccessFile(ROOT_DIR + fileName, "rw");
+        String filePath = rootNode
+                ? fileName
+                : TEMP_DIR + fileName;
+        try (RandomAccessFile file = new RandomAccessFile(filePath, "rw");
              FileChannel fileChannel = file.getChannel()) {
             verifyFileFormat(fileChannel, fileName);
             long totalVectors = file.readLong();
             int dimension = file.readInt();
-            log.info("building tree for node {}, which has {} vectors with {} dimension", fileName, totalVectors, dimension);
-            if (totalVectors <= NODE_MAX_SIZE) {
+            //log.info("building tree for node {}, which has {} vectors with {} dimension", fileName, totalVectors, dimension);
+            if (totalVectors <= leafSize) {
                 setChildNodeNames(file, dimension, -1, -1);
                 return;
             }
@@ -40,16 +43,16 @@ public class BallTreeBuilder {
             RealVector baseLine = farthestPoint.subtract(secondFarthestPoint);
             RealVector median = findApproximateMedianByBaseLine(fileChannel, baseLine, dimension, totalVectors, SAMPLE_SIZE);
 
-            try (RandomAccessFile leftChildFile = new RandomAccessFile(ROOT_DIR + leftChildFileName, "rw");
-                 RandomAccessFile rightChildFile = new RandomAccessFile(ROOT_DIR + rightChildFileName, "rw");
+            try (RandomAccessFile leftChildFile = new RandomAccessFile(TEMP_DIR + leftChildFileName, "rw");
+                 RandomAccessFile rightChildFile = new RandomAccessFile(TEMP_DIR + rightChildFileName, "rw");
             ) {
                 distributeVectorsBasedOnMedian(fileChannel, leftChildFile, rightChildFile, baseLine, median, dimension, totalVectors);
             }
             setChildNodeNames(file, dimension, leftChildFileName, rightChildFileName);
         }
 
-        build(String.valueOf(leftChildFileName), false);
-        build(String.valueOf(rightChildFileName), false);
+        build(String.valueOf(leftChildFileName), false, leafSize);
+        build(String.valueOf(rightChildFileName), false, leafSize);
     }
 
     private static RealVector calculateCentroidAndSetMeta(RandomAccessFile file, int dimension, long totalVectors) throws IOException {
@@ -59,7 +62,7 @@ public class BallTreeBuilder {
         file.seek(RADIUS_POSITION);
         file.writeDouble(radius);
         putVectorToFile(file, centroid);
-        log.info("root node, calculated radius: {}", radius);
+        //log.info("root node, calculated radius: {}", radius);
         return centroid;
     }
 
