@@ -41,7 +41,7 @@ public class BallTreeBuilder {
             RealVector farthestPoint = findFarthestVector(fileChannel, centroid, dimension, totalVectors);
             RealVector secondFarthestPoint = findSecondFarthestVector(fileChannel, centroid, farthestPoint, dimension, totalVectors);
             RealVector baseLine = farthestPoint.subtract(secondFarthestPoint);
-            RealVector median = findApproximateMedianByBaseLine(fileChannel, baseLine, dimension, totalVectors, SAMPLE_SIZE);
+            RealVector median = farthestPoint.add(secondFarthestPoint).mapDivide(2.0).projection(baseLine);
 
             try (RandomAccessFile leftChildFile = new RandomAccessFile(TEMP_DIR + leftChildFileName, "rw");
                  RandomAccessFile rightChildFile = new RandomAccessFile(TEMP_DIR + rightChildFileName, "rw");

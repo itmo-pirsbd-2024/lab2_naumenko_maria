@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7a13ab61-78d3-4ca5-b758-3d737f3a5b93" name="Changes" comment="mvp">
-      <change afterPath="$PROJECT_DIR$/src/test/java/ru/nms/TestUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/ru/nms/benchmark/BallTreeBenchmark.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/ru/nms/benchmark/ExecutionPlan.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitattributes" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/ru/nms/benchmark/SearchBenchmark.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ru/nms/BallTreeBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/nms/BallTreeBuilder.java" afterDir="false" />
@@ -15,6 +15,9 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/ru/nms/utils/BallTreeUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/nms/utils/BallTreeUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ru/nms/utils/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/nms/utils/Constants.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/ru/nms/BallTreeTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ru/nms/BallTreeTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ru/nms/TestUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ru/nms/TestUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ru/nms/benchmark/BallTreeBenchmark.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ru/nms/benchmark/BuildTreeAndSearchBenchmark.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ru/nms/benchmark/ExecutionPlan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ru/nms/benchmark/ExecutionPlan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +40,9 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 5
@@ -47,33 +53,57 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.BallTreeBenchmark.executor": "Run",
-    "Application.TestUtils.executor": "Run",
-    "JUnit.BallTreeTest.shouldFindKNearestNeighbours.executor": "Run",
-    "Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor": "Run",
-    "Maven.ball-tree-mem-external [clean].executor": "Run",
-    "Maven.ball-tree-mem-external [install].executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "dev",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/dev/ball-tree-mem-external/src/test/java/ru/nms/benchmark",
-    "project.structure.last.edited": "Problems",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.2"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.BallTreeBenchmark.executor&quot;: &quot;Run&quot;,
+    &quot;Application.BuildTreeAndSearchBenchmark.executor&quot;: &quot;Run&quot;,
+    &quot;Application.SearchBenchmark.executor&quot;: &quot;Run&quot;,
+    &quot;Application.TestUtils.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.BallTreeTest.shouldFindKNearestNeighbours.executor&quot;: &quot;Run&quot;,
+    &quot;Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.ball-tree-mem-external [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.ball-tree-mem-external [install].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/astonuser/IdeaProjects/dev/ball-tree-mem-external&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Problems&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\dev\ball-tree-mem-external\src\test\java\ru\nms\benchmark" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/assets" />
+    </key>
   </component>
-  <component name="RunManager" selected="Application.BallTreeBenchmark">
-    <configuration name="BallTreeBenchmark" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="ru.nms.benchmark.BallTreeBenchmark" />
+  <component name="RunManager" selected="JUnit.BallTreeTest.shouldFindKNearestNeighbours">
+    <configuration name="BuildTreeAndSearchBenchmark" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ru.nms.benchmark.BuildTreeAndSearchBenchmark" />
+      <module name="ball-tree-mem-external" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.nms.benchmark.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SearchBenchmark" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ru.nms.benchmark.SearchBenchmark" />
       <module name="ball-tree-mem-external" />
       <extension name="coverage">
         <pattern>
@@ -116,16 +146,17 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.BallTreeBenchmark" />
         <item itemvalue="JUnit.BallTreeTest.shouldFindKNearestNeighbours" />
+        <item itemvalue="Application.SearchBenchmark" />
         <item itemvalue="Application.TestUtils" />
+        <item itemvalue="Application.BuildTreeAndSearchBenchmark" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-21.0.2-corretto-21.0.2-4caba194b151-51586f01" />
+        <option value="jdk-21.0.2-corretto-21.0.2-4caba194b151-221dcadf" />
       </set>
     </attachedChunks>
   </component>
@@ -137,6 +168,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1731234895222</updated>
+      <workItem from="1731962533775" duration="6229000" />
+      <workItem from="1732291062815" duration="10775000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -157,9 +190,24 @@
     <option name="localTasksCounter" value="3" />
     <servers />
   </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init commit" />
     <MESSAGE value="mvp" />
     <option name="LAST_COMMIT_MESSAGE" value="mvp" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-field">
+          <url>jar://$USER_HOME$/Library/Java/JavaVirtualMachines/corretto-21.0.2/Contents/Home/lib/src.zip!/java.base/java/lang/Thread.java</url>
+          <line>347</line>
+          <properties field="nioBlocker" class="java.lang.Thread" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

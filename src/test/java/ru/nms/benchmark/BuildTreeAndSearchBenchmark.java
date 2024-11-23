@@ -13,9 +13,9 @@ import static ru.nms.TestUtils.constructSourceFilePath;
 @State(Scope.Benchmark)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-@Warmup(iterations = 1, time = 200, timeUnit = TimeUnit.MILLISECONDS)
-@Measurement(iterations = 3, time = 200, timeUnit = TimeUnit.MILLISECONDS)
-public class BallTreeBenchmark {
+@Warmup(iterations = 3, time = 200, timeUnit = TimeUnit.MILLISECONDS)
+@Measurement(iterations = 20, time = 200, timeUnit = TimeUnit.MILLISECONDS)
+public class BuildTreeAndSearchBenchmark {
 
     public static void main(String[] args) throws Exception {
         org.openjdk.jmh.Main.main(args);
@@ -24,7 +24,6 @@ public class BallTreeBenchmark {
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
     public void testBallTreeKnn(ExecutionPlan plan, Blackhole blackhole) throws IOException {
-        blackhole.consume(KnnService.knn(plan.getTarget(), plan.getK(), constructSourceFilePath(plan.getN(), plan.getDimension())));
+        blackhole.consume(KnnService.knn(plan.getTarget(), plan.getK(), constructSourceFilePath(plan.getN(), plan.getDimension()), plan.getLeafSize()));
     }
-
 }

@@ -17,10 +17,9 @@ import static ru.nms.utils.Constants.TEMP_DIR;
 
 @Slf4j
 public class KnnService {
-    public static List<RealVector> knn(RealVector target, int k, String rootFilePath) throws IOException {
+    public static List<RealVector> knn(RealVector target, int k, String rootFilePath, int nodeSize) throws IOException {
         Comparator<RealVector> comparator = Comparator.comparingDouble(v -> v.getDistance(target));
         MinMaxPriorityQueue<RealVector> knnQueue = null;
-        int vectorSize;
         try (RandomAccessFile file = new RandomAccessFile(rootFilePath, "r");
              FileChannel fileChannel = file.getChannel()) {
             verifyFileFormat(fileChannel, rootFilePath);
@@ -39,7 +38,7 @@ public class KnnService {
 
             if (totalVectors <= k) {
                 //log.warn("total vectors: {}, k: {} - exiting", totalVectors, k);
-                return firstVectors;
+                return readVectorsFromFile(fileChannel, dimension, (int) totalVectors);
             }
 
             knnQueue = MinMaxPriorityQueue
@@ -47,14 +46,12 @@ public class KnnService {
                     .maximumSize(k)
                     .create(firstVectors);
 
-            vectorSize = getVectorSize(dimension);
-
         }
-        search(knnQueue, target, rootFilePath);
+        search(knnQueue, target, rootFilePath, nodeSize);
         return knnQueue.stream().sorted(comparator).toList();
     }
 
-    private static void search(MinMaxPriorityQueue<RealVector> queue, RealVector target, String filePath) throws IOException {
+    private static void search(MinMaxPriorityQueue<RealVector> queue, RealVector target, String filePath, int nodeSize) throws IOException {
         long leftChildName;
         long rightChildName;
         try (RandomAccessFile file = new RandomAccessFile(filePath, "r");
@@ -74,16 +71,17 @@ public class KnnService {
             if (centroid.getDistance(target) - radius >= target.getDistance(queue.peekLast())) {
                 return;
             } else if (leftChildName == -1) {
-                for (int i = 0; i < totalVectors; i++) {
-                    RealVector vector = readVectorFromFile(fileChannel, dimension);
-                    if (vector.getDistance(target) < target.getDistance(queue.peekLast()) && !queue.contains(vector)) {
-                        queue.add(vector);
-                    }
-                }
+                readVectorsFromFile(fileChannel, dimension, nodeSize)
+                        .forEach(vector -> {
+                            if (vector.getDistance(target) < target.getDistance(queue.peekLast()) && !queue.contains(vector)) {
+                                queue.add(vector);
+                            }
+                        });
                 return;
             }
         }
-        search(queue, target, TEMP_DIR + leftChildName);
-        search(queue, target, TEMP_DIR + rightChildName);
+
+        search(queue, target, TEMP_DIR + leftChildName, nodeSize);
+        search(queue, target, TEMP_DIR + rightChildName, nodeSize);
     }
 }

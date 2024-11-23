@@ -21,6 +21,7 @@ class BallTreeTest {
     @Test
     void shouldFindKNearestNeighbours() throws IOException {
         //given
+        int leafSize = 1000;
         List<RealVector> vectors = TestDataGenerator.generateNVectors(RANDOM, 10000, 256);
         writeVectorsToFile(vectors, TEMP_DIR + TEST_FILE_NAME);
         RealVector target = vectors.getLast();
@@ -28,8 +29,8 @@ class BallTreeTest {
         List<RealVector> actualNeighbours = bruteForceKnn(new ArrayList<>(vectors), K, target);
 
         //when
-        BallTreeBuilder.build(TEMP_DIR + TEST_FILE_NAME, true, 100);
-        List<RealVector> neighbours = KnnService.knn(target, K, TEMP_DIR + TEST_FILE_NAME).stream().sorted(comparator).toList();
+        BallTreeBuilder.build(TEMP_DIR + TEST_FILE_NAME, true, leafSize);
+        List<RealVector> neighbours = KnnService.knn(target, K, TEMP_DIR + TEST_FILE_NAME, leafSize).stream().sorted(comparator).toList();
 
         //then
         assertIterableEquals(actualNeighbours, neighbours);

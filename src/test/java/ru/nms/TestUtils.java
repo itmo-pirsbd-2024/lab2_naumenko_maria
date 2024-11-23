@@ -19,9 +19,8 @@ import static ru.nms.utils.Constants.TEMP_DIR;
 public class TestUtils {
 
     public static final Random RANDOM = new Random(0);
-
-    private static int CHUNK_SIZE = Integer.MAX_VALUE;
-    public static String SOURCE_FILE_DIR = "source_files\\";
+    private static final int CHUNK_SIZE = Integer.MAX_VALUE;
+    public static String SOURCE_FILE_DIR = "source_files/";
 
     public static void writeVectorsToFile(List<RealVector> vectors, String fullPath) throws IOException {
         if (vectors.isEmpty()) {
@@ -41,26 +40,6 @@ public class TestUtils {
 
             for (RealVector vector : vectors) {
                 putVectorToFile(file, vector);
-            }
-        }
-    }
-
-    private static void generateFileWithNVectors(String fullPath, long n, int dimension) throws IOException {
-        try (RandomAccessFile file = new RandomAccessFile(fullPath, "rw");
-             FileChannel fileChannel = file.getChannel()) {
-            fileChannel.write(ByteBuffer.wrap(BALL_TREE_HEADER.getBytes(StandardCharsets.UTF_8)));
-
-            file.writeLong(n);
-            file.writeInt(dimension);
-            setPositionToStartOfVectorData(fileChannel, dimension);
-
-            while (n > 0) {
-                int chunkVectorsAmount = Math.toIntExact(Math.min(n, CHUNK_SIZE / getVectorSize(dimension)));
-                List<RealVector> vectors = generateNVectors(RANDOM, chunkVectorsAmount, dimension);
-                for (RealVector vector : vectors) {
-                    putVectorToFile(file, vector);
-                }
-                n -= chunkVectorsAmount;
             }
         }
     }
@@ -86,13 +65,38 @@ public class TestUtils {
         }
     }
 
+    /**
+     * Утильный main для формирования исходных файлов с векторами
+     * и построения дерева(нужен для SearchBenchmark, который предназначен
+     * для поиска по уже построенному дереву)
+     */
     public static void main(String[] args) throws IOException {
-        long n = 10000000;
+        long n = 1000000;
         int dimension = 256;
         generateFileWithNVectors(constructSourceFilePath(n, dimension), n, dimension);
     }
 
     public static String constructSourceFilePath(long n, int dimension) {
         return SOURCE_FILE_DIR + n + "_" + dimension;
+    }
+
+    private static void generateFileWithNVectors(String fullPath, long n, int dimension) throws IOException {
+        try (RandomAccessFile file = new RandomAccessFile(fullPath, "rw");
+             FileChannel fileChannel = file.getChannel()) {
+            fileChannel.write(ByteBuffer.wrap(BALL_TREE_HEADER.getBytes(StandardCharsets.UTF_8)));
+
+            file.writeLong(n);
+            file.writeInt(dimension);
+            setPositionToStartOfVectorData(fileChannel, dimension);
+
+            while (n > 0) {
+                int chunkVectorsAmount = Math.toIntExact(Math.min(n, CHUNK_SIZE / getVectorSize(dimension)));
+                List<RealVector> vectors = generateNVectors(RANDOM, chunkVectorsAmount, dimension);
+                for (RealVector vector : vectors) {
+                    putVectorToFile(file, vector);
+                }
+                n -= chunkVectorsAmount;
+            }
+        }
     }
 }

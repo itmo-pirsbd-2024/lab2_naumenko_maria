@@ -28,7 +28,7 @@ public class ExecutionPlan {
     @Param({"1000", "10000", "100000", "1000000"})
     private long n;
 
-    @Param({"128"})
+    @Param({"256"})
     private int dimension;
 
     @Setup(Level.Trial)
